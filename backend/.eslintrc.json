@@ -1,0 +1,30 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": "eslint:recommended",
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "comma-dangle": ["error", "always-multiline"],
+    "semi": "off",
+    "no-var": "error",
+    "no-process-exit": "off",
+    "no-console": "off",
+    "prefer-const": "error",
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ]
+  }
+}
