@@ -17,6 +17,7 @@
     "comma-dangle": ["error", "always-multiline"],
     "semi": "off",
     "no-var": "error",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
     "no-process-exit": "off",
     "no-console": "off",
     "prefer-const": "error",
