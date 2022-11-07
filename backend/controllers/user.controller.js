@@ -2,7 +2,6 @@ const { validationResult } = require("express-validator")
 const UserModel = require("../models/user")
 const jwt = require("jsonwebtoken")
 const bycrypt = require("bcryptjs")
-// const mail = require("../mail/nodemailer");
 
 const createUser = async (req, res) => {
   try {
@@ -93,10 +92,6 @@ const updateUser = async (req, res) => {
       const hashPassowrd = await bycrypt?.hash(req.body.password, genSalt)
       req.body.password = hashPassowrd
     }
-    // const errors = validationResult(req).formatWith((message) => message)
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ message: errors.array() })
-    // }
     const { id } = req.params
     const findId = await UserModel.findById(id)
     const findEmail = await UserModel.findOneAndUpdate(

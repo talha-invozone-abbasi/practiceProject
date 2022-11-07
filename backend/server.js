@@ -20,18 +20,12 @@ app.get("/", (req, res) => {
   res.send("Wellcome to mongoose")
 })
 
-// routes user
-
 app.use("/api/users", routerUser)
 app.use("/api/auth", routerAuth)
 app.use("/api/post", routerPost)
 
-// error handlers
-// not found
 app.use(notFound)
 
-// error handlers
-// errors other found
 app.use(errorHandler)
 
 server.listen(port, (err) => {
