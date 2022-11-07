@@ -30,5 +30,4 @@ app.use(errorHandler)
 
 server.listen(port, (err) => {
   if (err) throw err
-  console.log("Runing on port")
 })

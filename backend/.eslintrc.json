@@ -15,11 +15,13 @@
   "rules": {
     "prettier/prettier": "error",
     "comma-dangle": ["off", "always-multiline"],
+    
     "semi": "off",
     "no-var": "error",
     "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
     "no-process-exit": "off",
-    "no-console": "off",
+    "no-console": "error",
+    "spaced-comment": ["error", "always"],
     "prefer-const": "error",
     "indent": [
       "error",

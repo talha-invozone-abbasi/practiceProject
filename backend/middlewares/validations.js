@@ -13,12 +13,15 @@ const updateUserValidation = [
 ]
 
 const loginVerification = [
-  body("email").isEmail().isEmpty(),
+  body("email").isEmail(),
   body("password").not().isEmpty(),
 ]
+
+const createPostValidation = [body("name").not().isEmpty()]
 
 module.exports = {
   CreateUserValidation,
   loginVerification,
   updateUserValidation,
+  createPostValidation,
 }

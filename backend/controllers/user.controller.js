@@ -49,7 +49,7 @@ const getUser = async (req, res) => {
       res.status(200).json(getUser)
     }
   } catch (err) {
-    console.log(err)
+    res.json({ message: err.message })
   }
 }
 
