@@ -14,7 +14,7 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "comma-dangle": ["error", "always-multiline"],
+    "comma-dangle": ["off", "always-multiline"],
     "semi": "off",
     "no-var": "error",
     "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
