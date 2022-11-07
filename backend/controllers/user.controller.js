@@ -6,9 +6,9 @@ const bycrypt = require("bcryptjs")
 
 const createUser = async (req, res) => {
   try {
-    const errors = validationResult(req).formatWith((msg) => msg)
+    const errors = validationResult(req).formatWith((message) => message)
     if (!errors.isEmpty()) {
-      return res.status(400).json({ msg: errors.array() })
+      return res.status(400).json({ message: errors.array() })
     }
     let findEmail = await UserModel.findOne({ email: req.body.email })
     if (findEmail) {
@@ -36,7 +36,7 @@ const createUser = async (req, res) => {
     await findEmail.save()
     return res.status(201).json({ findEmail, tokenID })
   } catch (err) {
-    return res.json({ msg: err.message })
+    return res.json({ message: err.message })
   }
 }
 const getUser = async (req, res) => {
@@ -64,7 +64,7 @@ const singleUser = async (req, res) => {
     }
     return res.status(200).json(singleUser)
   } catch (err) {
-    res.json({ msg: err.message })
+    res.json({ message: err.message })
   }
 }
 const deleteUser = async (req, res) => {
@@ -75,9 +75,9 @@ const deleteUser = async (req, res) => {
       res.status(404)
       throw new Error("User not found")
     }
-    return res.status(200).json({ msg: "user deleted" })
+    return res.status(200).json({ message: "user deleted" })
   } catch (err) {
-    res.json({ msg: err.message })
+    res.json({ message: err.message })
   }
 }
 
@@ -85,7 +85,7 @@ const updateUser = async (req, res) => {
   try {
     if (req?.body?.email) {
       return res.status(400).json({
-        msg: "Email cannot be edited",
+        message: "Email cannot be edited",
       })
     }
     if (req?.body?.password) {
@@ -93,9 +93,9 @@ const updateUser = async (req, res) => {
       const hashPassowrd = await bycrypt?.hash(req.body.password, genSalt)
       req.body.password = hashPassowrd
     }
-    // const errors = validationResult(req).formatWith((msg) => msg)
+    // const errors = validationResult(req).formatWith((message) => message)
     // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ msg: errors.array() })
+    //   return res.status(400).json({ message: errors.array() })
     // }
     const { id } = req.params
     const findId = await UserModel.findById(id)
@@ -112,7 +112,7 @@ const updateUser = async (req, res) => {
     }
     return res.status(201).json(findEmail)
   } catch (err) {
-    return res.json({ msg: err.message })
+    return res.json({ message: err.message })
   }
 }
 

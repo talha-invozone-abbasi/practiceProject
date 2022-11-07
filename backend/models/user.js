@@ -1,35 +1,40 @@
 const mongoose = require("mongoose")
 
-const userSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const userSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: Object,
+      required: true,
+    },
+    profileImage: {
+      type: String,
+    },
+    followers: {
+      type: Number,
+      default: 0,
+    },
+    accountType: {
+      type: String,
+      required: true,
+      default: "public",
+    },
   },
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: Object,
-    required: true,
-  },
-  profileImage: {
-    type: String,
-  },
-  followers: {
-    type: Number,
-    default: 0,
-  },
-  accountType: {
-    type: String,
-    required: true,
-    default: "public",
-  },
-})
+  {
+    timestamp: true,
+  }
+)
 
 userSchema.pre("save", function (next) {
   const doc = this

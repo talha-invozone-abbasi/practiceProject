@@ -6,6 +6,8 @@ const conectdb = require("./database/db")
 const port = process.env.PORT || 4000
 const { notFound, errorHandler } = require("./middlewares/errorHandling")
 const routerUser = require("./routes/user.route")
+const routerAuth = require("./routes/auth.route")
+const routerPost = require("./routes/post.route")
 
 const app = express()
 app.use(bodyParser.json())
@@ -21,6 +23,8 @@ app.get("/", (req, res) => {
 // routes user
 
 app.use("/api/users", routerUser)
+app.use("/api/auth", routerAuth)
+app.use("/api/post", routerPost)
 
 // error handlers
 // not found
