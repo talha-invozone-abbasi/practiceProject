@@ -79,7 +79,7 @@ const update = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ message: errors.array() })
   }
-  const id = req?.params?.params
+  const id = req?.params?.id
   const userRequest = await UserModel.findById(req?.user)
 
   try {
@@ -100,7 +100,7 @@ const update = async (req, res) => {
       )
       return res.status(200).json({
         success: true,
-        message: "post created successfully",
+        message: "post Updated successfully",
         data: postRequest,
       })
     } catch (err) {

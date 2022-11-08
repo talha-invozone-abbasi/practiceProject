@@ -1,7 +1,7 @@
+const bycrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 const { validationResult } = require("express-validator")
 const UserModel = require("../models/user")
-const jwt = require("jsonwebtoken")
-const bycrypt = require("bcryptjs")
 
 const loginIn = async (req, res) => {
   const errors = validationResult(req).formatWith((message) => message)
@@ -30,9 +30,8 @@ const loginIn = async (req, res) => {
         id: request.id,
       },
     }
-
     const generateToken = jwt.sign(token, process.env.JWT_SECRET, {
-      expiresIn: 3600 * 3600,
+      expiresIn: process.env.JWT_EXPIRE_TIME,
     })
     request = await UserModel.findOne({ email: req?.body?.email }).select(
       "-password"

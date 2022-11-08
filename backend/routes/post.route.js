@@ -1,3 +1,4 @@
+const router = require("express").Router()
 const {
   create,
   get,
@@ -6,8 +7,6 @@ const {
 } = require("../controllers/post.controller")
 const authToken = require("../middlewares/authToken")
 const { createPostValidation } = require("../middlewares/validations")
-
-const router = require("express").Router()
 
 router.post("/", [authToken, createPostValidation], create)
 router.get("/", [authToken], get)

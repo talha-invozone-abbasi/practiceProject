@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator")
-const UserModel = require("../models/user")
 const jwt = require("jsonwebtoken")
 const bycrypt = require("bcryptjs")
+const UserModel = require("../models/user")
 
 const createUser = async (req, res) => {
   try {
@@ -29,7 +29,7 @@ const createUser = async (req, res) => {
       },
     }
     const tokenID = jwt.sign(token, process.env.JWT_SECRET, {
-      expiresIn: 3600 * 30,
+      expiresIn: process.env.JWT_EXPIRE_TIME,
     })
 
     await findEmail.save()
@@ -44,9 +44,9 @@ const getUser = async (req, res) => {
     where = { "role.title": req.body.title }
   }
   try {
-    const getUser = await UserModel.find(where)
-    if (getUser) {
-      res.status(200).json(getUser)
+    const getUserRequest = await UserModel.find(where)
+    if (getUserRequest) {
+      res.status(200).json(getUserRequest)
     }
   } catch (err) {
     res.json({ message: err.message })
@@ -56,12 +56,12 @@ const getUser = async (req, res) => {
 const singleUser = async (req, res) => {
   try {
     const { id } = req.params
-    const singleUser = await UserModel.findById(id)
-    if (!singleUser) {
+    const singleUserRequest = await UserModel.findById(id)
+    if (!singleUserRequest) {
       res.status(404)
       throw new Error("User not found")
     }
-    return res.status(200).json(singleUser)
+    return res.status(200).json(singleUserRequest)
   } catch (err) {
     res.json({ message: err.message })
   }
@@ -69,8 +69,8 @@ const singleUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params
-    const singleUser = await UserModel.findByIdAndRemove(id)
-    if (!singleUser) {
+    const singleUserRequest = await UserModel.findByIdAndRemove(id)
+    if (!singleUserRequest) {
       res.status(404)
       throw new Error("User not found")
     }

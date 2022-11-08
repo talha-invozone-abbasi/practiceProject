@@ -38,12 +38,12 @@ const userSchema = mongoose.Schema(
 
 userSchema.pre("save", function (next) {
   const doc = this
-  doc.role["key"] = doc?._id
+  doc.role.key = doc?._id
   next()
 })
 userSchema.pre(["updateOne", "findOneAndUpdate"], function (next) {
   const doc = this
-  doc._update.role["key"] = doc?._conditions?.id
+  doc._update.role.key = doc?._conditions?.id
   next()
 })
 
