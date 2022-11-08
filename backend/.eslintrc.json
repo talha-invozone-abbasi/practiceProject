@@ -5,7 +5,7 @@
     "es2021": true,
     "node":true
   },
-  "extends": "eslint:recommended",
+  "extends": ["airbnb-base", "prettier", "plugin:node/recommended","eslint:recommended"],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest"
@@ -19,8 +19,13 @@
     "no-var": "error",
     "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
     "no-process-exit": "off",
-    "no-console": "off",
+    "no-console": "error",
+    "spaced-comment": ["error", "always"],
+    "import/newline-after-import":"off",
+    "consistent-return":"off",
+    "no-underscore-dangle":["error", { "allow": ["_id", "_update","_conditions"] }],
     "prefer-const": "error",
+    "func-names":"off",
     "indent": [
       "error",
       2,

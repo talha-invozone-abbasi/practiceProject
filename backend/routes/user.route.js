@@ -6,8 +6,8 @@ const {
   deleteUser,
   updateUser,
 } = require("../controllers/user.controller")
-const { CreateUserValidation } = require("../middlewares/validations")
-router.post("/", [...CreateUserValidation], createUser)
+const { loginVerification } = require("../middlewares/validations")
+router.post("/", [...loginVerification], createUser)
 router.get("/", getUser)
 router.get("/:id", singleUser)
 router.delete("/:id", deleteUser)

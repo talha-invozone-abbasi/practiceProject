@@ -1,13 +1,13 @@
 const { validationResult } = require("express-validator")
-const UserModel = require("../models/user")
 const jwt = require("jsonwebtoken")
 const bycrypt = require("bcryptjs")
+const UserModel = require("../models/user")
 
 const createUser = async (req, res) => {
   try {
-    const errors = validationResult(req).formatWith((msg) => msg)
+    const errors = validationResult(req).formatWith((message) => message)
     if (!errors.isEmpty()) {
-      return res.status(400).json({ msg: errors.array() })
+      return res.status(400).json({ message: errors.array() })
     }
     let findEmail = await UserModel.findOne({ email: req.body.email })
     if (findEmail) {
@@ -29,13 +29,13 @@ const createUser = async (req, res) => {
       },
     }
     const tokenID = jwt.sign(token, process.env.JWT_SECRET, {
-      expiresIn: 3600 * 30,
+      expiresIn: process.env.JWT_EXPIRE_TIME,
     })
 
     await findEmail.save()
     return res.status(201).json({ findEmail, tokenID })
   } catch (err) {
-    return res.json({ msg: err.message })
+    return res.json({ message: err.message })
   }
 }
 const getUser = async (req, res) => {
@@ -44,39 +44,39 @@ const getUser = async (req, res) => {
     where = { "role.title": req.body.title }
   }
   try {
-    const getUser = await UserModel.find(where)
-    if (getUser) {
-      res.status(200).json(getUser)
+    const getUserRequest = await UserModel.find(where)
+    if (getUserRequest) {
+      res.status(200).json(getUserRequest)
     }
   } catch (err) {
-    console.log(err)
+    res.json({ message: err.message })
   }
 }
 
 const singleUser = async (req, res) => {
   try {
     const { id } = req.params
-    const singleUser = await UserModel.findById(id)
-    if (!singleUser) {
+    const singleUserRequest = await UserModel.findById(id)
+    if (!singleUserRequest) {
       res.status(404)
       throw new Error("User not found")
     }
-    return res.status(200).json(singleUser)
+    return res.status(200).json(singleUserRequest)
   } catch (err) {
-    res.json({ msg: err.message })
+    res.json({ message: err.message })
   }
 }
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params
-    const singleUser = await UserModel.findByIdAndRemove(id)
-    if (!singleUser) {
+    const singleUserRequest = await UserModel.findByIdAndRemove(id)
+    if (!singleUserRequest) {
       res.status(404)
       throw new Error("User not found")
     }
-    return res.status(200).json({ msg: "user deleted" })
+    return res.status(200).json({ message: "user deleted" })
   } catch (err) {
-    res.json({ msg: err.message })
+    res.json({ message: err.message })
   }
 }
 
@@ -84,7 +84,7 @@ const updateUser = async (req, res) => {
   try {
     if (req?.body?.email) {
       return res.status(400).json({
-        msg: "Email cannot be edited",
+        message: "Email cannot be edited",
       })
     }
     if (req?.body?.password) {
@@ -92,7 +92,6 @@ const updateUser = async (req, res) => {
       const hashPassowrd = await bycrypt?.hash(req.body.password, genSalt)
       req.body.password = hashPassowrd
     }
-
     const { id } = req.params
     const findId = await UserModel.findById(id)
     const findEmail = await UserModel.findOneAndUpdate(
@@ -108,7 +107,7 @@ const updateUser = async (req, res) => {
     }
     return res.status(201).json(findEmail)
   } catch (err) {
-    return res.json({ msg: err.message })
+    return res.json({ message: err.message })
   }
 }
 
