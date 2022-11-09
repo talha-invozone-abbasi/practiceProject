@@ -79,6 +79,7 @@ const update = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ message: errors.array() })
   }
+
   const id = req?.params?.id
   const userRequest = await UserModel.findById(req?.user)
 
@@ -111,9 +112,110 @@ const update = async (req, res) => {
   }
 }
 
+const likeAddandRemove = async (req, res) => {
+  const id = req.params.id
+
+  try {
+    const getPostRequest = await PostModel?.findById(id)
+    const getUserRequest = await UserModel?.findById(req?.user)
+
+    try {
+      if (!getPostRequest) {
+        res.status(404)
+        throw new Error("Post is not Present")
+      }
+      if (!getUserRequest) {
+        res.status(403)
+        throw new Error("User is not authorized")
+      }
+      const validateIfUserAlreadyLiked = getPostRequest?.likes?.find(
+        (user) => user?.user.toString() === req?.user?.toString()
+      )
+      if (validateIfUserAlreadyLiked) {
+        const getIndex = getPostRequest?.likes?.map((user) =>
+          user.user?.toString().indexOf(req?.user)
+        )
+        getPostRequest?.likes?.splice(getIndex, 1)
+        await getPostRequest.save()
+        return res.status(200).json({
+          message: true,
+        })
+      }
+    } catch (err) {
+      return res?.json({ message: err.message })
+    }
+    const likeAdded = { user: req?.user }
+    getPostRequest?.likes.push(likeAdded)
+    await getPostRequest.save()
+    return res.status(200).json({
+      success: true,
+      message: "Like Sucessfully",
+      getPostRequest,
+    })
+  } catch (err) {
+    return res?.json({ message: err.message })
+  }
+}
+
+const createComment = async (req, res) => {
+  const errors = validationResult(req).formatWith((message) => message)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ message: errors.array() })
+  }
+  try {
+    const id = req.params.id
+    const user = req?.user
+
+    const findUser = await UserModel?.findById(req?.user).select("-password")
+    const findPost = await PostModel?.findById(id)
+
+    if (!findUser) {
+      res.status(404)
+      throw new Error("User not Authenticated")
+    }
+    if (!findPost) {
+      res.status(404)
+      throw new Error("Post not present")
+    }
+
+    const comment = {
+      name: req?.body.name,
+      authorName: findUser.name,
+      user,
+    }
+    findPost?.comment?.unshift(comment)
+    await findPost.save()
+    return res.status(200).json({
+      success: true,
+      message: "post created successfully",
+      data: comment,
+    })
+  } catch (err) {
+    return res.status(500).json({ message: "Something went wrong" })
+  }
+}
+
+const getComments = async (req, res) => {
+  const postId = req?.params?.postId
+
+  const request = await PostModel.findById(postId)
+  try {
+    if (!request) {
+      res.status(404)
+      throw new Error("Not found Post")
+    }
+    res?.status(200).json(request?.comment)
+  } catch (err) {
+    throw new Error({ message: err.message })
+  }
+}
+
 module.exports = {
   create,
   get,
   deletee,
   update,
+  likeAddandRemove,
+  createComment,
+  getComments,
 }
