@@ -1,22 +1,5 @@
 const mongoose = require("mongoose")
 
-const postComment = mongoose.Schema(
-  {
-    user: {
-      required: true,
-      ref: "User",
-      type: mongoose?.Schema?.Types?.ObjectId,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    timestamp: true,
-  }
-)
-
 const postscheme = mongoose.Schema(
   {
     user: {
@@ -33,7 +16,22 @@ const postscheme = mongoose.Schema(
       type: String,
       required: true,
     },
-    comment: [postComment],
+    comment: [
+      {
+        user: {
+          required: true,
+          ref: "User",
+          type: mongoose?.Schema?.Types?.ObjectId,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        authorName: {
+          type: String,
+        },
+      },
+    ],
     likes: [
       {
         user: {
