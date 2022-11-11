@@ -209,6 +209,27 @@ const getComments = async (req, res) => {
     throw new Error({ message: err.message })
   }
 }
+const deleteComments = async (req, res) => {
+  const postId = req?.params?.postId
+  const commentId = req?.params?.commentId
+
+  const postRequest = await PostModel.findById(postId)
+
+  try {
+    if (!postRequest) {
+      res.status(404)
+      throw new Error("Post is not Present")
+    }
+    const findIndex = postRequest.comment?.map((item) =>
+      item?.id.indexOf(commentId)
+    )
+    postRequest.comment?.splice(findIndex, 1)
+    await postRequest.save()
+    return res.status(200).json({ message: "Post deleted" })
+  } catch (err) {
+    return res?.json({ message: err.message })
+  }
+}
 
 module.exports = {
   create,
@@ -218,4 +239,5 @@ module.exports = {
   likeAddandRemove,
   createComment,
   getComments,
+  deleteComments,
 }

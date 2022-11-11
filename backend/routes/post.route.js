@@ -7,6 +7,7 @@ const {
   likeAddandRemove,
   createComment,
   getComments,
+  deleteComments,
 } = require("../controllers/post.controller")
 const authToken = require("../middlewares/authToken")
 const { createPostValidation } = require("../middlewares/validations")
@@ -18,5 +19,6 @@ router.put("/:id", [authToken, createPostValidation], update)
 router.post("/like/:id", [authToken], likeAddandRemove)
 router.post("/comment/:id", [authToken, createPostValidation], createComment)
 router.get("/:postId", [authToken], getComments)
+router.delete("/:postId/:commentId", [authToken], deleteComments)
 
 module.exports = router
