@@ -45,6 +45,9 @@ const postscheme = mongoose.Schema(
       type: String,
       default: "public",
     },
+    group: {
+      type: String,
+    },
     share: {
       type: Number,
       default: 0,

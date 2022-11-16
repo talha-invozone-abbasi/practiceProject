@@ -1,8 +1,23 @@
 const { validationResult } = require("express-validator")
 const PostModel = require("../models/post")
 const UserModel = require("../models/user")
+const GroupModel = require("../models/group")
 
 const create = async (req, res) => {
+  const groupId = req?.params?.groupId
+  let group = ""
+  if (groupId) {
+    try {
+      const findGroup = await GroupModel.findById(groupId)
+      if (!findGroup) {
+        res.status(404)
+        throw new Error("Group not found")
+      }
+      group = findGroup?.id
+    } catch (err) {
+      res.json({ message: err.message })
+    }
+  }
   const errors = validationResult(req).formatWith((message) => message)
   if (!errors.isEmpty()) {
     return res.status(400).json({ message: errors.array() })
@@ -20,6 +35,7 @@ const create = async (req, res) => {
       name: req?.body.name,
       authorName: findUser.name,
       user,
+      group,
     })
 
     await request.save()
@@ -38,6 +54,8 @@ const get = async (req, res) => {
     where = { user: req?.body.user }
   } else if (req?.body?.postType) {
     where = { postType: req?.body.postType }
+  } else if (req?.body?.group) {
+    where = { group: req?.body?.group }
   }
   const request = await PostModel.find(where)
   try {

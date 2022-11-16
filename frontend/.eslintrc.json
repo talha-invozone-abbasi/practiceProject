@@ -1,0 +1,48 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
+
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:prettier/recommended"],
+
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "plugins": ["react"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "prettier/prettier": "error",
+    "prefer-destructuring": "off",
+    "comma-dangle": ["off", "always-multiline"],
+    "semi": "off",
+    "dot-notation": "off",
+    "object-shorthand": "off",
+    "prefer-template": "off",
+    "no-var": "error",
+    "no-unused-vars": "error",
+    "no-process-exit": "off",
+    "no-console": "error",
+    "spaced-comment": ["error", "always"],
+    "import/newline-after-import": "off",
+    "consistent-return": "off",
+    "no-underscore-dangle": "error",
+    "prefer-const": "error",
+    "func-names": "off",
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ]
+  }
+}

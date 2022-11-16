@@ -67,7 +67,7 @@ const addMember = async (req, res) => {
       res.status(404)
       throw new Error("you are already joined this group ")
     }
-    findGroup?.members.unshift(req?.user)
+    findGroup?.members.unshift({ user: req?.user })
 
     await findGroup.save()
     return res.status(200).json({
@@ -108,6 +108,49 @@ const removeMember = async (req, res) => {
         data: findGroup,
       })
     }
+    return res.status(404).json({
+      message: "Members not found",
+    })
+  } catch (err) {
+    return res.status(500).json({ message: err?.message })
+  }
+}
+const removeMemberByAdmin = async (req, res) => {
+  try {
+    const groupId = req?.params.groupId
+    const userId = req?.params.userId
+    const findUser = await UserModel?.findById(req?.user).select("-password")
+    if (!findUser) {
+      res.status(404)
+      throw new Error("User not Authenticated")
+    }
+
+    const findGroup = await GroupModel.findById(groupId)
+
+    if (!findGroup) {
+      res.status(404)
+      throw new Error("Group not present")
+    }
+    if (findGroup.user.toString() !== userId) {
+      res.status(404)
+      throw new Error("User not Authenticated")
+    }
+
+    const isUserAlreadyInGroup = findGroup?.members?.map(
+      (e) => e?.user?.toString() === userId?.toString()
+    )
+    if (isUserAlreadyInGroup?.length > 0) {
+      const getIndex = findGroup?.members?.map((user) =>
+        user.user?.toString().indexOf(userId)
+      )
+      findGroup?.members?.splice(getIndex, 1)
+      await findGroup.save()
+      return res.status(200).json({
+        success: true,
+        message: "User Removed",
+        data: findGroup,
+      })
+    }
   } catch (err) {
     return res.status(500).json({ message: err?.message })
   }
@@ -118,4 +161,5 @@ module.exports = {
   get,
   addMember,
   removeMember,
+  removeMemberByAdmin,
 }
