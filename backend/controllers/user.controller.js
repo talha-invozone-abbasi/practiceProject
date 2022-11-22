@@ -110,6 +110,43 @@ const updateUser = async (req, res) => {
     return res.json({ message: err.message })
   }
 }
+const uploadImage = async (req, res) => {
+  try {
+    const profileImage = req.file?.filename
+    const singleUserRequest = await UserModel.findById(req?.user)
+    if (!singleUserRequest) {
+      res.status(404)
+      throw new Error("User not found")
+    }
+    if (!profileImage) {
+      res.status(404)
+      throw new Error("Picture is required")
+    }
+    singleUserRequest["profileImage"] = profileImage
+    return res.status(200).json(singleUserRequest)
+  } catch (err) {
+    res.json({ message: err.message })
+  }
+}
+
+const removeImage = async (req, res) => {
+  try {
+    const singleUserRequest = await UserModel.findById(req?.user)
+    if (!singleUserRequest) {
+      res.status(404)
+      throw new Error("User not found")
+    }
+    if (singleUserRequest?.profileImage === null) {
+      res.status(404)
+      throw new Error("Picture is required")
+    }
+    singleUserRequest["profileImage"] = null
+    await singleUserRequest.save()
+    return res.status(200).json(singleUserRequest)
+  } catch (err) {
+    res.json({ message: err.message })
+  }
+}
 
 module.exports = {
   createUser,
@@ -117,4 +154,6 @@ module.exports = {
   singleUser,
   deleteUser,
   updateUser,
+  uploadImage,
+  removeImage,
 }

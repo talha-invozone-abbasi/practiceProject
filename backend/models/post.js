@@ -1,4 +1,6 @@
 const mongoose = require("mongoose")
+const { Comment } = require("./comment")
+const { Like } = require("./like")
 
 const postscheme = mongoose.Schema(
   {
@@ -18,24 +20,17 @@ const postscheme = mongoose.Schema(
     },
     comment: [
       {
-        user: {
-          required: true,
-          ref: "User",
+        commentId: {
           type: mongoose?.Schema?.Types?.ObjectId,
-        },
-        name: {
-          type: String,
-          required: true,
-        },
-        authorName: {
-          type: String,
+          ref: "Comment",
         },
       },
     ],
     likes: [
       {
-        user: {
+        likeId: {
           type: mongoose?.Schema?.Types?.ObjectId,
+          ref: "Like",
         },
       },
     ],
@@ -44,6 +39,9 @@ const postscheme = mongoose.Schema(
       required: true,
       type: String,
       default: "public",
+    },
+    group: {
+      type: String,
     },
     share: {
       type: Number,
@@ -55,4 +53,19 @@ const postscheme = mongoose.Schema(
   }
 )
 
-module.exports = mongoose.model("Post", postscheme)
+postscheme.post("findOneAndRemove", async function (next) {
+  try {
+    await Comment.deleteMany({
+      postId: this?._conditions?._id,
+    })
+    await Like.deleteMany({
+      postId: this?._conditions?._id,
+    })
+  } catch (e) {
+    throw new Error("Error")
+  }
+})
+
+module.exports = {
+  Post: mongoose.model("Post", postscheme),
+}
